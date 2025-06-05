@@ -1,0 +1,63 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="row g-3 align-items-center">
+    <div class="col-auto">
+        <label for="adminId" class="col-form-label">Input Id</label>
+    </div>
+    <div class="col-auto">
+        <input type="text" class="form-control" id="adminId">
+    </div>
+    <div class="col-auto">
+        <button type="button" id="btnConnect" class="btn btn-primary mb-2" onclick="ConnectSignalR()">Connect</button>
+    </div>
+    <div class="col-auto">
+        <button type="button"  class="btn btn-outline-success mb-2" onclick="CheckAlive()">Check Alive</button>
+    </div>
+</div>
+<div class="text-center">
+    
+    
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Status</td>
+                <td>Working time</td>
+                <td>In Process</td>
+                <td>Idle time</td>
+                <td>Online</td>
+                <td>Offline</td>
+                <td>Version</td>
+                <td>Take screenshot</td>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="exampleModal" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Screenshot</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+        //ConnectSignalR();
+    
+</script>

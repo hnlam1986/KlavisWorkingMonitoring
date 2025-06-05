@@ -1,0 +1,84 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.online {
+    color: #53b4ef;
+}
+.offline {
+    color: gray;
+}
+.inprocess {
+    color: #1fc91f;
+}
+.idle {
+    color: orange;
+}
+.disconnect {
+    color: red;
+}
+.connect {
+    color: black;
+}
+.counter {
+    margin-left: 5px;
+}
+.modal-body img{
+    width:100%
+}
+h5{
+    font-size:1rem;
+}
+.list-schedule{
+    padding-right:20px;
+}
+.btn-schedule-new{
+    width:150px;
+    margin-right:5px;
+    margin-left:106px
+}
+.btn-schedule-update {
+    width: 150px;
+    margin-left: 5px;
+}
+.schedule-head div{
+    text-align:center;
+    padding-bottom:10px;
+    font-size:15px;
+    font-weight:bold;
+}
+.border-right {
+    border-right: solid rgba(0, 0, 0, .125) 1px
+}
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.btn-list-edit {
+    right: 60px;
+}
+.btn-list-del {
+    right: 10px;
+}
+.list-group-item.selected {
+    background-color: #0d6efd;
+    color:white;
+}
