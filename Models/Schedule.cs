@@ -13,6 +13,7 @@
         public bool? isActive { get; set; }
         public bool? isDeleted { get; set; }
         public List<StepSchedule>? steps { get; set; }
+        public string? klavisaccount { get; set; }
 
     }
 }

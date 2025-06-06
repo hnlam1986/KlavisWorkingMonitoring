@@ -44,7 +44,7 @@ h5{
     font-size:1rem;
 }
 .list-schedule{
-    padding-right:20px;
+   /* padding-right:20px;*/
 }
 .btn-schedule-new{
     width:150px;
@@ -72,6 +72,9 @@ h5{
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
 }
+.btn-list-person {
+    right: 110px;
+}
 .btn-list-edit {
     right: 60px;
 }
@@ -81,4 +84,8 @@ h5{
 .list-group-item.selected {
     background-color: #0d6efd;
     color:white;
+}
+.checkbox-body-modal{
+    overflow-y:auto;
+    max-height:500px;
 }

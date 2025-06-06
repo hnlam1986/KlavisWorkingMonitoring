@@ -1,6 +1,7 @@
 ﻿var _listSchedule = []
 var _listStep = []
-var _listScheduleStep=[]
+var _listScheduleStep = []
+var _listKlavisAccount=[]
 function InitSchedulePage() {
  
     $("#ddlTeam").val(-1);
@@ -10,6 +11,8 @@ function InitSchedulePage() {
 function GetListScheduleSteps() {
     AjaxGet("api/schedule/getschedules", GetSchedule_Success);
     AjaxGet("api/schedule/getsteps", GetStep_Success);
+    AjaxGet("api/KlavisAccount/GetKlavisAccount", GetKlavisAccount_Success);
+
 }
 function GetSchedule_Success(data) {
     _listSchedule = data;
@@ -23,16 +26,18 @@ function GetSchedule_Success(data) {
 function BuildScheduleItem(schedule) {
     var item = '<div class="list-group-item list-group-item-action" aria-current="true" id="schedule-item-' + schedule.idSchedule +'">' +
         '<div class="row"  data-schedule-id="' + schedule.idSchedule + '">' +
-        '<div class="col col-10" onclick="SelectScheduleItem(' + schedule.idSchedule + ')">' +
+        '<div class="col" onclick="SelectScheduleItem(' + schedule.idSchedule + ')">' +
         '<div class="d-flex w-100 justify-content-between">' +
         '<h5 class="mb-1">' + schedule.description + '</h5>' +
         '</div>' +
         '<p class="mb-1">' + schedule.projectTeam + '</p>' +
-        '</div>' +
-        '<div class="col col-2">' +
+        '<button class="vertical-center btn btn-info btn-list-person" onclick="AssignSchedule(' + schedule.idSchedule + ')"><i class="bi bi-person-fill"></i></button>' +
         '<button class="vertical-center btn btn-warning btn-list-edit" onclick="EditScheduleItem(' + schedule.idSchedule + ')"><i class="bi bi-pencil"></i></button>' +
-        '<button class="vertical-center btn btn-danger btn-list-del" onclick="DeleteScheduleItem(' + schedule.idSchedule + ')"><i class="bi bi-trash"></i></button>'
-    '</div>' +
+        '<button class="vertical-center btn btn-danger btn-list-del" onclick="DeleteScheduleItem(' + schedule.idSchedule + ')"><i class="bi bi-trash"></i></button>'+
+        '</div>' +
+        //'<div class="col col-2">' +
+        
+        //'</div>' +
         '</div>' +
         '</div>'
     return item;
@@ -44,6 +49,10 @@ function GetStep_Success(data) {
     });
     $("#ddlStep").val(-1);
 }
+function GetKlavisAccount_Success(data) {
+    _listKlavisAccount = data;
+}
+
 function AddSelectedClassListGroup(groupSelector, itemSelector) {
     $(groupSelector + " .list-group-item").removeClass("selected");
     $(itemSelector).addClass("selected")
@@ -57,16 +66,7 @@ function SelectScheduleItem(id) {
         _listScheduleStep = schedule.steps
         BuildListScheduleStep(schedule.steps)
     }
-    //for (var i = 0; i < _listSchedule.length; i++) {
-    //    var schedule = _listSchedule[i];
-    //    if (schedule.idSchedule == id) {
-    //        //$("#txtName").val(schedule.description);
-    //        //$("#ddlTeam").val(schedule.idProjectTeam);
-    //        _listScheduleStep = schedule.steps
-    //        BuildListScheduleStep(schedule.steps)
-    //        break;
-    //    }
-    //}  
+ 
 }
 function EditScheduleItem(id) {
     for (var i = 0; i < _listSchedule.length; i++) {
@@ -111,10 +111,10 @@ function UpdateScheduleItemUI(item) {
 }
 function DeleteScheduleItem(id) {
     _scheduleItem = GetScheduleDataById(id);
-    SaveSchedule(3,id);
+    ShowOkCancelDialog("Delete message", "Do you want to delete this schedule?", function () { SaveSchedule(3, id); })
 }
 function BuildStepScheduleItem(step) {
-    var item = '<div class="list-group-item list-group-item-action" id="step-schedule-item-"' + step.idStepSchedule +'> ' +
+    var item = '<div class="list-group-item list-group-item-action" id="step-schedule-item-' + step.idStepSchedule + '" data-id="' + step.idStepSchedule +'" data-sorting="' + step.orderNum + '"> ' +
         '<div class="row" >' +
         '<div class="col col-10">' +
         '<div class="d-flex w-100 justify-content-between">' +
@@ -138,7 +138,8 @@ function BuildListScheduleStep(data) {
         '</div>' +
         '</div>'
     $(".list-step").append(header);
-    $(data).each(function () {
+    $(data).each(function (index) {
+        this.orderNum = index + 1;
         var item = BuildStepScheduleItem(this);
         $(".list-step").append(item);
     })
@@ -148,23 +149,48 @@ function BuildListScheduleStep(data) {
         handle: '.list-group-item',
         sort: true,
         filter: '.sortable-disabled',
-        chosenClass: 'active'
+        chosenClass: 'active',
+        onEnd: function (evt) {
+            SaveStepScheduleSorting()
+        }
     });
 }
+
 function EditScheduleStepItem(id) {
     for (var i = 0; i < _listScheduleStep.length; i++) {
         var step = _listScheduleStep[i];
         if (step.idStepSchedule == id) {
             $("#ddlStep").val(step.idInputStep);
             $("#txtPercent").val(step.percentRatio);
-            
-            //BuildListScheduleStep(schedule.steps)
+            _stepScheduleItem = step;
             break;
         }
     }
 }
 function DeleteScheduleStepItem(id) {
-
+    ShowOkCancelDialog("Delete message", "Do you want to delete this step?", function () {
+        var steps = _scheduleItem.steps;
+        var stepItem = {};
+        for (var i = 0; i < steps.length; i++) {
+            if (steps[i].idStepSchedule == id) {
+                stepItem = steps[i];
+                break;
+            }
+        }
+        stepItem.isDeleted = true;
+        AjaxPost("api/schedule/SaveStepSchedule", DeleteScheduleStepItemSuccess, stepItem)
+    });
+}
+function DeleteScheduleStepItemSuccess(id) {
+    $("#step-schedule-item-" + id).remove();
+    var steps = _scheduleItem.steps;
+    var stepItem = {};
+    for (var i = 0; i < _scheduleItem.steps.length; i++) {
+        if (_scheduleItem.steps[i].idStepSchedule == id) {
+            _scheduleItem.steps.splice(i, 1);
+            break;
+        }
+    }
 }
 var _scheduleItem = {}
 var _scheduleSaveMode=0
@@ -233,10 +259,11 @@ function SaveStepSchedule(mode, id) {
 
     }
     else if (mode == 2) {
+        _stepScheduleItem.description = stepName;
+        _stepScheduleItem.idInputStep = idStep;
+        _stepScheduleItem.percentRatio = percent;
 
-    } else {
-
-    }
+    } 
     AjaxPost("api/schedule/SaveStepSchedule", SaveStepScheduleSuccess, _stepScheduleItem)
 }
 function SaveStepScheduleSuccess(res) {
@@ -254,11 +281,77 @@ function SaveStepScheduleSuccess(res) {
             _scheduleItem.steps.push(item);
         } else if (_stepScheduleSaveMode == 2) {
             //update schedule
-            UpdateScheduleArray(item);
-            UpdateScheduleItemUI(item);
+            //UpdateStepScheduleArray(item);
+            UpdateStepScheduleItemUI(item);
         } else {
             //remove schedule
             $("#schedule-item-" + res).remove();
         }
     }
+}
+function UpdateStepScheduleArray(step) {
+    for (var i = 0; i < _listSchedule.length; i++) {
+        var schedule = _listSchedule[i];
+        if (schedule.idSchedule == step.idSchedule) {
+            _listSchedule[i].steps = _listScheduleStep;
+            break;
+        }
+    }
+}
+function UpdateStepScheduleItemUI(step) {
+    var $sch = $("#step-schedule-item-" + step.idStepSchedule);
+    $sch.find("h5").text(step.description);
+    $sch.find("p").text(step.percentRatio+"%");
+}
+function SaveStepScheduleSorting() {
+    var $step = $("#stepList .list-group-item:not(:first-child)");
+    var sorting = [];
+    var stepSorting = []
+    var steps = _scheduleItem.steps;
+    $step.each(function (index) {
+        var id = $(this).attr("data-id");
+        var item = {};
+        item.id = id;
+        item.ordernum = index+1;
+        sorting.push(item);
+        for (var i = 0; i < steps.length; i++) {
+            if (steps[i].idStepSchedule == id) {
+                stepSorting.push(steps[i]);
+                break;
+            }
+        }
+    })
+    
+    console.log(sorting);
+    AjaxPost("api/schedule/SaveStepScheduleSorting", function () {
+        _scheduleItem.steps = stepSorting;
+    }, sorting)
+}
+
+function AssignSchedule(id) {
+    var schedule = GetScheduleDataById(id);
+    var assigned = "";
+    if (schedule && schedule.klavisaccount) {
+        assigned = schedule.klavisaccount + ",";
+    }
+    var listCheckbox = [];
+    $(_listKlavisAccount).each(function () {
+        if (assigned.indexOf(this.idklavisaccount + ",") >= 0) {
+            this.ischecked = 1
+            this.disabled = false;
+        } else {
+            this.ischecked = 0;
+            this.disabled = false;
+            if (this.schedule != "" && (this.schedule + ",").indexOf(id + ",") < 0) {
+                this.disabled = true;
+            } 
+        }
+        var checkbox = {};
+        checkbox.idvalue = this.idklavisaccount;
+        checkbox.displayvalue = this.klavisid;
+        checkbox.ischecked = this.ischecked;
+        checkbox.isdisable = this.disabled;
+        listCheckbox.push(checkbox);
+    });
+    ShowCheckboxListDialog("KlavisId assigned", listCheckbox, function () { });
 }

@@ -36,11 +36,11 @@ namespace HyperBPOWorkingMonitoring.Controllers
             ScheduleDAL dal = new ScheduleDAL();
             return dal.SaveStepSchedule(step);
         }
-        [HttpPost("SaveSorting")]
-        public int SaveStepSchedule(List<StepSchedule> steps)
+        [HttpPost("SaveStepScheduleSorting")]
+        public int SaveStepScheduleSorting(List<SortingItem> steps)
         {
             ScheduleDAL dal = new ScheduleDAL();
-            return dal.SaveSorting(steps);
+            return dal.SaveStepScheduleSorting(steps);
         }
     }
 }

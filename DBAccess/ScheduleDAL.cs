@@ -26,6 +26,7 @@ namespace HyperBPOWorkingMonitoring.DBAccess
                     bool IsActive = reader.IsDBNull(reader.GetOrdinal("isActive")) ? false : reader.GetBoolean(reader.GetOrdinal("IsActive"));
                     bool IsDeleted = reader.IsDBNull(reader.GetOrdinal("isDeleted")) ? false : reader.GetBoolean(reader.GetOrdinal("IsDeleted"));
                     string Steps = reader.IsDBNull(reader.GetOrdinal("steps")) ? "" : reader.GetString(reader.GetOrdinal("steps"));
+                    string klavisaccount = reader.IsDBNull(reader.GetOrdinal("klavisaccount")) ? "" : reader.GetString(reader.GetOrdinal("klavisaccount"));
 
                     Schedule schedule = new Schedule();
                     schedule.idSchedule = IdSchedule;
@@ -38,7 +39,7 @@ namespace HyperBPOWorkingMonitoring.DBAccess
                     {
                         schedule.steps = Newtonsoft.Json.JsonConvert.DeserializeObject<List<StepSchedule>>(Steps);
                     }
-
+                    schedule.klavisaccount = klavisaccount;
                     res.Add(schedule);
                 }
             }
@@ -109,6 +110,20 @@ namespace HyperBPOWorkingMonitoring.DBAccess
             command.Parameters.AddWithValue("@isActive", step.isActive == null ? DBNull.Value : step.isActive);
             command.Parameters.AddWithValue("@isDeleted", step.isDeleted == null ? DBNull.Value : step.isDeleted);
             res = (int)command.ExecuteScalar();
+            cnn.Close();
+            return res;
+        }
+
+        public int SaveStepScheduleSorting(List<SortingItem> items)
+        {
+            int res = 0;
+            SqlConnection cnn = new SqlConnection(CnnString);
+            cnn.Open();
+            SqlCommand command = new SqlCommand("SaveStepScheduleSorting", cnn);
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(items);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@json", json);
+            res = (int)command.ExecuteNonQuery();
             cnn.Close();
             return res;
         }
