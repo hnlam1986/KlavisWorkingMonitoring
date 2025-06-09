@@ -42,5 +42,11 @@ namespace HyperBPOWorkingMonitoring.Controllers
             ScheduleDAL dal = new ScheduleDAL();
             return dal.SaveStepScheduleSorting(steps);
         }
+        [HttpPost("AssignKlavisIdToSchedule")]
+        public int AssignKlavisIdToSchedule(List<KlavisAccount> account)
+        {
+            ScheduleDAL dal = new ScheduleDAL();
+            return dal.AssignKlavisIdToSchedule(account);
+        }
     }
 }

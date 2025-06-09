@@ -22,7 +22,8 @@ namespace HyperBPOWorkingMonitoring.DBAccess
                     int idklavisaccount = reader.IsDBNull(reader.GetOrdinal("idklavisaccount")) ? 0 : reader.GetInt32(reader.GetOrdinal("idklavisaccount"));
                     string userlogin = reader.IsDBNull(reader.GetOrdinal("userlogin")) ? "" : reader.GetString(reader.GetOrdinal("userlogin"));
                     string klavisid = reader.IsDBNull(reader.GetOrdinal("klavisid")) ? "" : reader.GetString(reader.GetOrdinal("klavisid"));
-                    string schedule = reader.IsDBNull(reader.GetOrdinal("schedule")) ? "" : reader.GetString(reader.GetOrdinal("schedule"));
+                    int idschedule = reader.IsDBNull(reader.GetOrdinal("idschedule")) ? 0 : reader.GetInt32(reader.GetOrdinal("idschedule"));
+                    int idkvaccountschedule = reader.IsDBNull(reader.GetOrdinal("idkvaccountschedule")) ? 0 : reader.GetInt32(reader.GetOrdinal("idkvaccountschedule"));
                     bool isactive = reader.IsDBNull(reader.GetOrdinal("isactive")) ? false : reader.GetBoolean(reader.GetOrdinal("isactive"));
                     bool isdeleted = reader.IsDBNull(reader.GetOrdinal("isdeleted")) ? false : reader.GetBoolean(reader.GetOrdinal("isdeleted"));
 
@@ -32,8 +33,9 @@ namespace HyperBPOWorkingMonitoring.DBAccess
                     account.klavisid = klavisid;
                     account.isactive = isactive;
                     account.isdeleted = isdeleted;
-                    account.schedule = schedule;
-                    
+                    account.idschedule = idschedule;
+                    account.idkvaccountschedule = idkvaccountschedule;
+
                     res.Add(account);
                 }
             }

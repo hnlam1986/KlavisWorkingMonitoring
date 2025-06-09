@@ -47,8 +47,12 @@ function ShowCheckboxListDialog(title, list, okFunc) {
         if (this.isdisable == 1) {
             disabled = " disabled ";
         }
+        var idkvaccountschedule = "";
+        if (this.idkvaccountschedule) {
+            idkvaccountschedule = 'data-idkvaccountschedule="' + this.idkvaccountschedule + '"'
+        }
         var item = '<li class="list-group-item">' +
-            '<input class="form-check-input me-1" type="checkbox" ' + checked + disabled+ ' id="chk-' + this.idvalue + '">' +
+            '<input class="form-check-input me-1" type="checkbox" ' + checked + disabled + ' id="chk-' + this.idvalue + '" data-id="' + this.idvalue + '" ' + idkvaccountschedule +' >' +
             '<label class="form-check-label" for="chk-' + this.idvalue +'">'+this.displayvalue+'</label>'+
             '</li>'
         listcheckbox = listcheckbox + item;

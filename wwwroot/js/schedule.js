@@ -332,26 +332,89 @@ function AssignSchedule(id) {
     var schedule = GetScheduleDataById(id);
     var assigned = "";
     if (schedule && schedule.klavisaccount) {
-        assigned = schedule.klavisaccount + ",";
+        assigned = ","+schedule.klavisaccount + ",";
     }
     var listCheckbox = [];
+    _beforeListCheckboxChange = [];
     $(_listKlavisAccount).each(function () {
-        if (assigned.indexOf(this.idklavisaccount + ",") >= 0) {
+        if (assigned.indexOf("," +this.idklavisaccount + ",") >= 0) {
             this.ischecked = 1
             this.disabled = false;
+
         } else {
             this.ischecked = 0;
             this.disabled = false;
-            if (this.schedule != "" && (this.schedule + ",").indexOf(id + ",") < 0) {
+            if (this.idschedule != "" && this.idschedule!=id) {
                 this.disabled = true;
             } 
         }
         var checkbox = {};
         checkbox.idvalue = this.idklavisaccount;
+        checkbox.idklavisaccount = this.idklavisaccount;
         checkbox.displayvalue = this.klavisid;
         checkbox.ischecked = this.ischecked;
         checkbox.isdisable = this.disabled;
+        checkbox.idkvaccountschedule = this.idkvaccountschedule;
+        checkbox.idschedule = this.idschedule;
         listCheckbox.push(checkbox);
+        if (this.ischecked == true) {
+            _beforeListCheckboxChange.push(checkbox);
+        }
     });
-    ShowCheckboxListDialog("KlavisId assigned", listCheckbox, function () { });
+    
+    ShowCheckboxListDialog("KlavisId assigned", listCheckbox, function () { SaveAssignSchedule(id); });
+}
+var _beforeListCheckboxChange = [];
+function SaveAssignSchedule(scheduleid) {
+    var checked = $("#exampleModal .checkbox-body-modal .list-group-item .form-check-input:checked");
+    var list = []
+    $(checked).each(function () {
+        var item = {};
+        item.idklavisaccount = $(this).attr("data-id");
+        item.idkvaccountschedule = $(this).attr("data-idkvaccountschedule");
+        item.idschedule = scheduleid;
+        list.push(item);
+    })
+    //so sanh 2 list
+    var afterCheck = [];
+    for (var i = 0; i < _beforeListCheckboxChange.length;i++) {
+        var before = _beforeListCheckboxChange[i];
+        var exist = false;
+        for (var j = 0; j < list.length;j++) {
+            var after = list[j];
+            if (before.idkvaccountschedule == after.idkvaccountschedule) {
+                exist = true;
+                break;
+            }
+        }
+        if (exist == false) {
+            before.ischecked = false;
+            before.isdeleted = true;
+            afterCheck.push(before);
+        }
+    }
+
+    for (var i = 0; i < list.length;i++){
+        var after = list[i];
+        var exist = false;
+        for (var j = 0; j < _beforeListCheckboxChange.length; j++){
+            var before = _beforeListCheckboxChange[j];
+            if (before.idkvaccountschedule == after.idkvaccountschedule) {
+                exist = true;
+                break;
+            }
+        };
+        if (exist == false) {
+            afterCheck.push(after);
+        }
+    }
+
+    console.log(afterCheck);
+    AjaxPost("api/schedule/AssignKlavisIdToSchedule", AssignKlavisIdToScheduleSuccessful, afterCheck)
+}
+function AssignKlavisIdToScheduleSuccessful() {
+    AjaxGet("api/schedule/getschedules", function (data) {
+        _listSchedule = data;
+    });
+    AjaxGet("api/KlavisAccount/GetKlavisAccount", GetKlavisAccount_Success);
 }

@@ -127,5 +127,17 @@ namespace HyperBPOWorkingMonitoring.DBAccess
             cnn.Close();
             return res;
         }
+        public int AssignKlavisIdToSchedule(List<KlavisAccount> account) {
+            int res = 0;
+            SqlConnection cnn = new SqlConnection(CnnString);
+            cnn.Open();
+            SqlCommand command = new SqlCommand("AssignKlavisIdToSchedule", cnn);
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(account);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@json", json);
+            res = (int)command.ExecuteNonQuery();
+            cnn.Close();
+            return res;
+        }
     }
 }
