@@ -265,3 +265,35 @@ function TakeScreenShot(id) {
         connection.invoke("SendMessage", adminId, { Type: "TakeScreenShot", Content: id });
     }
 }
+function BuildStepScheduleItem(step) {
+    var item = '<div class="list-group-item list-group-item-action" id="step-schedule-item-' + step.idStepSchedule + '" data-id="' + step.idStepSchedule + '" data-sorting="' + step.orderNum + '"> ' +
+        '<div class="row" >' +
+        '<div class="col col-10">' +
+        '<div class="d-flex w-100 justify-content-between">' +
+        '<h5 class="mb-1">' + step.description + '</h5>' +
+        '</div>' +
+        '<p class="mb-1">' + step.percentRatio + '%</p>' +
+        '</div>' +
+        '<div class="col col-2">' +
+        '<button class="vertical-center btn btn-warning btn-list-edit" onclick="EditScheduleStepItem(' + step.idStepSchedule + ')"><i class="bi bi-pencil"></i></button>' +
+        '<button class="vertical-center btn btn-danger btn-list-del" onclick="DeleteScheduleStepItem(' + step.idStepSchedule + ')"><i class="bi bi-trash"></i></button>'
+    '</div>' +
+        '</div>'
+    return item;
+}
+function BuildStepScheduleItemWithoutButton(step) {
+    var item = '<div class="list-group-item list-group-item-action" id="step-schedule-item-' + step.idStepSchedule + '" data-id="' + step.idStepSchedule + '" data-sorting="' + step.orderNum + '"> ' +
+        '<div class="row" >' +
+        '<div class="col col-12">' +
+        '<div class="d-flex w-100 justify-content-between">' +
+        '<h5 class="mb-1">' + step.description + '</h5>' +
+        '<p class="mb-1">' + step.percentRatio + '%</p>' +
+        '</div>' +
+        
+        '</div>' +
+        '<div class="col col-2">' +
+        
+    '</div>' +
+        '</div>'
+    return item;
+}

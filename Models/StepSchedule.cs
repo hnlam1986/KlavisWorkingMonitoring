@@ -12,6 +12,7 @@
         public int? idSchedule { get; set; }
         public int? percentRatio { get; set; }
         public int? orderNum { get; set; }
+        public string? steplink { get; set; }
         public bool? isActive { get; set; }
         public bool? isDeleted { get; set; }
 

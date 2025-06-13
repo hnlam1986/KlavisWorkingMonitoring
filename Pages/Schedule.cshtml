@@ -6,7 +6,7 @@
 <script src="~/js/Sortable.min.js" asp-append-version="true"></script>
 
 <div class="container">
-    <div class="row schedule-head">
+    <div class="row form-head">
         <div class="col-6">
             Schedule setting
         </div>
@@ -34,8 +34,10 @@
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <button class="btn btn-success col-6 btn-schedule-new" onclick="SaveSchedule(1)">+New</button>
-                    <button class="btn btn-warning col-6 btn-schedule-update" onclick="SaveSchedule(2)">Update</button>
+                    <div class="col col-12 d-flex w-100 justify-content-between">
+                        <button class="btn btn-success col-6 btn-schedule-new" onclick="SaveSchedule(1)">+New</button>
+                        <button class="btn btn-warning col-6 btn-schedule-update" onclick="SaveSchedule(2)">Update</button>
+                    </div>
                 </div>
             </div>
             
@@ -58,8 +60,10 @@
                     </div>
                 </div>
                 <div class="mb-3 row">
+                    <div class="col col-12 d-flex w-100 justify-content-between">
                     <button class="btn btn-success col-6 btn-schedule-new" onclick="SaveStepSchedule(1)">+New</button>
                     <button class="btn btn-warning col-6 btn-schedule-update" onclick="SaveStepSchedule(2)">Update</button>
+                </div>
                 </div>
             </div>
 

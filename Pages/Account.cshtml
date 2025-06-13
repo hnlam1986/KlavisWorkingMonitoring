@@ -4,3 +4,115 @@
 }
 <script src="~/js/account.js" asp-append-version="true"></script>
 <script src="~/js/Sortable.min.js" asp-append-version="true"></script>
+
+    <div class="row">
+        <div class="col col-4">
+            <div class="row form-head">
+                <div>Klavis account</div>
+            </div>
+            
+            <div class="row account-form">
+                <div class="col border-right">
+                    <div class="">
+                        <div class="mb-3 row">
+                            <label for="txtKlavisId" class="col-sm-2 col-form-label">KlavisId</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtKlavisId">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="txtLoginName" class="col-sm-2 col-form-label">LoginId</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtLoginName">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col col-12 d-flex w-100 justify-content-between">
+                                <button class="btn btn-success col-6 btn-account-new" onclick="SaveKlavisAccount(1)">+New</button>
+                                <button class="btn btn-warning col-6 btn-account-update" onclick="SaveKlavisAccount(2)">Update</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row account-list-item">
+                <div class="col border-right">
+                    <div class="list-group list-account list-group-sticky-header" id="listAccount">
+                        <div class="list-group-item disabled list-group-header" aria-disabled="true">
+                            KlavisId Item
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-8">
+            <div class="row form-head">
+                <div>Flow setting</div>
+            </div>
+            
+            <div class="row">
+                <div class="col col-5">
+                    <div class="row radio-setting">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rdFlow" id="rdPriority" value="1" >
+                            <label class="form-check-label" for="rdPriority">
+                                Priority steps
+                            </label>
+                        </div>
+                    </div>
+                    <ul class="list-group list-priority-step" id="listPriorityStep">
+                        <li class="list-group-item list-group-item-action disabled list-group-header">
+                            Step priority
+                        </li>
+                    </ul>
+                </div>
+                <div class="col col-5">
+                    <div class="row radio-setting">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rdFlow" id="rdScheduleStep" value="2" >
+                            <label class="form-check-label" for="rdScheduleStep">
+                                Schedule steps
+                            </label>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="mb-3 row">
+                            <label for="ddlStep" class="col-sm-3 col-form-label">Schedule</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" id="ddlSchedule" onchange="ShowStepInSchedule()">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group list-shedule-step">
+                        <div class="list-group-item list-group-item-action disabled list-group-header">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Schedule step</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-2">
+                    <div class="row radio-setting">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rdFlow" id="rdNoApply" value="0" >
+                            <label class="form-check-label" for="rdNoApply">
+                                Default
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2 pt-1">
+                <button id="btnSaveFlow" class="btn btn-outline-primary btn-apply-setting" onclick="ApplyFlowSetting()">Apply flow setting</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function(){
+        InitAccountPage();
+    });
+</script>

@@ -46,16 +46,13 @@ h5{
 .list-schedule{
    /* padding-right:20px;*/
 }
-.btn-schedule-new{
-    width:150px;
-    margin-right:5px;
-    margin-left:106px
+.btn-schedule-new {
+    width: calc(50% - 10px);
 }
 .btn-schedule-update {
-    width: 150px;
-    margin-left: 5px;
+    width: calc(50% - 10px);
 }
-.schedule-head div{
+.form-head div{
     text-align:center;
     padding-bottom:10px;
     font-size:15px;
@@ -88,4 +85,41 @@ h5{
 .checkbox-body-modal{
     overflow-y:auto;
     max-height:500px;
+}
+.btn-account-new {
+    width: calc(50% - 10px);
+}
+
+.btn-account-update {
+    width: calc(50% - 10px);
+}
+.radio-setting{
+    padding-left:12px;
+    padding-bottom:10px
+}
+.list-group-header, .list-group-header h5 {
+    font-weight: bold;
+}
+button.list-group-item.selected {
+    background-color: #0d6efd;
+    color: white;
+}
+.list-group-sticky-header {
+    max-height: calc(100vh - 345px);
+    overflow-y: auto;
+    position: relative;
+}
+    .list-group-sticky-header button.disabled {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+.truncate {
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.account-page{
+    max-width:1500px;
 }

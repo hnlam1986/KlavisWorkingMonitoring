@@ -113,22 +113,7 @@ function DeleteScheduleItem(id) {
     _scheduleItem = GetScheduleDataById(id);
     ShowOkCancelDialog("Delete message", "Do you want to delete this schedule?", function () { SaveSchedule(3, id); })
 }
-function BuildStepScheduleItem(step) {
-    var item = '<div class="list-group-item list-group-item-action" id="step-schedule-item-' + step.idStepSchedule + '" data-id="' + step.idStepSchedule +'" data-sorting="' + step.orderNum + '"> ' +
-        '<div class="row" >' +
-        '<div class="col col-10">' +
-        '<div class="d-flex w-100 justify-content-between">' +
-        '<h5 class="mb-1">' + step.description + '</h5>' +
-        '</div>' +
-        '<p class="mb-1">' + step.percentRatio + '%</p>' +
-        '</div>' +
-        '<div class="col col-2">' +
-        '<button class="vertical-center btn btn-warning btn-list-edit" onclick="EditScheduleStepItem(' + step.idStepSchedule + ')"><i class="bi bi-pencil"></i></button>' +
-        '<button class="vertical-center btn btn-danger btn-list-del" onclick="DeleteScheduleStepItem(' + step.idStepSchedule + ')"><i class="bi bi-trash"></i></button>'
-        '</div>' +
-        '</div>'
-    return item;
-}
+
 function BuildListScheduleStep(data) {
     var html = "";
     $(".list-step").html("");
@@ -187,6 +172,7 @@ function DeleteScheduleStepItemSuccess(id) {
     var stepItem = {};
     for (var i = 0; i < _scheduleItem.steps.length; i++) {
         if (_scheduleItem.steps[i].idStepSchedule == id) {
+            ShowToastMessage("Delete step " + _scheduleItem.steps[i].description + ' is successful!');
             _scheduleItem.steps.splice(i, 1);
             break;
         }
@@ -230,13 +216,17 @@ function SaveScheduleSuccess(res) {
             //new schedule
             $(".list-schedule").append(html);
             _listSchedule.push(item);
+            ShowToastMessage("Create schedule " + item.description + ' is successful!');
         } else if (_scheduleSaveMode == 2) {
             //update schedule
             UpdateScheduleArray(item);
             UpdateScheduleItemUI(item);
+            ShowToastMessage("Update schedule " + item.description + ' is successful!');
         } else {
             //remove schedule
             $("#schedule-item-" + res).remove();
+            ShowToastMessage("Delete schedule " + item.description + ' is successful!');
+            
         }
     }
 }
@@ -279,13 +269,16 @@ function SaveStepScheduleSuccess(res) {
                 _scheduleItem.steps = [];
             }
             _scheduleItem.steps.push(item);
+            ShowToastMessage("Create step " + item.description + ' is successful!');
         } else if (_stepScheduleSaveMode == 2) {
             //update schedule
             //UpdateStepScheduleArray(item);
             UpdateStepScheduleItemUI(item);
+            ShowToastMessage("Update step " + item.description + ' is successful!');
         } else {
             //remove schedule
             $("#schedule-item-" + res).remove();
+            ShowToastMessage("Delete step " + item.description + ' is successful!');
         }
     }
 }
@@ -413,6 +406,7 @@ function SaveAssignSchedule(scheduleid) {
     AjaxPost("api/schedule/AssignKlavisIdToSchedule", AssignKlavisIdToScheduleSuccessful, afterCheck)
 }
 function AssignKlavisIdToScheduleSuccessful() {
+    ShowToastMessage("Assign schedule for selected account is successful!");
     AjaxGet("api/schedule/getschedules", function (data) {
         _listSchedule = data;
     });

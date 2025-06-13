@@ -87,3 +87,21 @@ function ShowCheckboxListDialog(title, list, okFunc) {
     })
     _modal.show();
 }
+
+function ShowToastMessage(msg) {
+    var html = '<div id="myToastEl" class="toast position-fixed top-0 end-0 text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-delay="2000">' +
+        '<div class="d-flex">' +
+        '<div class="toast-body">' +
+        msg +
+        '</div>' +
+        '<button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>' +
+        '</div>' +
+        '</div>';
+    $("body").append(html);
+    var myToastEl = document.getElementById('myToastEl')
+    var myToast = bootstrap.Toast.getOrCreateInstance(myToastEl)
+    myToastEl.addEventListener('hidden.bs.toast', function () {
+        $("#myToastEl").remove();
+    })
+    myToast.show();
+}
